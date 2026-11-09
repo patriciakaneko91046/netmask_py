@@ -27,3 +27,10 @@ The trade-off: we parse the address by hand instead of using `ipaddress.IPv4Addr
 - Prefix `0` is legal; the entire address is host bits, and a non-zero address is still valid — it just has host bits set.
 - Prefix `32` has no host bits; `host_bits` is always empty.
 - The unspecified address `0.0.0.0` is accepted like any other address; this library does not classify addresses as public, private, or reserved.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
